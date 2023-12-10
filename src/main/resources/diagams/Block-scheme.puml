@@ -1,0 +1,59 @@
+@startuml
+package "Frontend" {
+  frame "Pages" {
+    [Login Page]
+    [Signup Page]
+    [Main Page]
+  }
+}
+
+package "Backend" {
+  frame "Controllers" {
+    [FileController]
+    [UserController]
+  }
+
+  frame "Services" {
+    [FileCompressionService]
+    [UserService]
+    [FileCrudService]
+  }
+
+  frame "Compression Engine" {
+    [Compressor Interface]
+    [NoCompressionCompressor]
+    [GZIPCompressor]
+    [XZCompressor]
+  }
+
+  frame "Repositories" {
+    [FileRepository]
+    [UserRepository]
+  }
+
+  database "Database" {
+  }
+}
+
+[Login Page] --> [UserController]
+[Signup Page] --> [UserController]
+[Main Page] --> [FileController]
+
+[UserController] --> [UserService]
+[FileController] --> [FileCrudService]
+[FileController] --> [FileCompressionService]
+
+[UserService] --> [UserRepository]
+[FileCrudService] --> [FileRepository]
+[FileCompressionService] --> [Compressor Interface]
+[FileCompressionService] --> [FileRepository]
+
+
+[NoCompressionCompressor] ..> [Compressor Interface] : implements
+[GZIPCompressor] ..> [Compressor Interface] : implements
+[XZCompressor] ..> [Compressor Interface] : implements
+
+[FileRepository] --> [Database]
+[UserRepository] --> [Database]
+
+@enduml

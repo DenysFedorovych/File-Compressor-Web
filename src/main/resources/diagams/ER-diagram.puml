@@ -1,0 +1,22 @@
+@startuml
+entity "User" {
+    * id : Long
+    --
+    * username : String
+    * password : String
+    --
+    + files : Set<File>
+}
+
+entity "File" {
+    * id : Long
+    --
+    * fileName : String
+    * creationDate : Date
+    * content : byte[]
+    --
+    + user : User
+}
+
+User ||--o{ File
+@enduml
