@@ -46,6 +46,9 @@
 </head>
 <body>
 <div class="container">
+  <div style="text-align: right;">
+    <button onclick="logout()">Log out</button>
+  </div>
   <div id="fileOperations">
     <input type="file" id="fileInput" style="display: none;" onchange="uploadFile()">
     <button onclick="document.getElementById('fileInput').click()">Upload File</button>
@@ -69,6 +72,7 @@
   <div id="changeNameForm" style="display:none;">
     <input type="text" id="newFileName" placeholder="New file name">
     <button onclick="changeFileName()">Submit</button>
+    <button onclick="closeChangeNameForm()">Close</button>
   </div>
   <div id="compressForm" style="display:none;">
     <select id="compressionAlgorithm">
@@ -76,6 +80,7 @@
       <!-- Add more options here as needed -->
     </select>
     <button onclick="compressFile()">Submit</button>
+    <button onclick="closeCompressForm()">Close</button>
   </div>
 </div>
 
@@ -102,14 +107,32 @@
     }
   });
 
+  function logout() {
+    localStorage.removeItem('userId');
+    window.location.href = 'login.html';
+  }
+
   const filesTable = document.getElementById('filesTable');
   filesTable.addEventListener('click', (event) => {
     if (event.target.tagName === 'TD') {
-      document.querySelectorAll('.selected').forEach(row => row.classList.remove('selected'));
-      event.target.parentElement.classList.add('selected');
+      const row = event.target.parentElement;
+      if (row.classList.contains('selected')) {
+        row.classList.remove('selected');
+      } else {
+        document.querySelectorAll('.selected').forEach(r => r.classList.remove('selected'));
+        row.classList.add('selected');
+      }
       updateButtonStates();
     }
   });
+
+  function closeChangeNameForm() {
+    document.getElementById('changeNameForm').style.display = 'none';
+  }
+
+  function closeCompressForm() {
+    document.getElementById('compressForm').style.display = 'none';
+  }
 
   function formatBytes(bytes, decimals = 2) {
     if (bytes === 0) return '0 Bytes';
