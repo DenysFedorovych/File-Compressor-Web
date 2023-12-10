@@ -43,7 +43,7 @@ public class FileCrudService {
         file.setUser(userService.getUserById(userId).orElseThrow());
 
         file = fileRepository.save(file);
-        return objectMapper.convertValue(file, FileModel.class); // Assuming you have ObjectMapper to convert entities to models
+        return objectMapper.convertValue(file, FileModel.class);
     }
 }
 
