@@ -50,11 +50,13 @@ public class FileController {
     @PostMapping("/compress/{fileId}")
     public ResponseEntity<ByteArrayResource> compressFile(@PathVariable Long fileId, @RequestParam(required = false) String algorithm) {
         File compressedFile = fileCompressionService.compressFile(fileId, algorithm);
-
         ByteArrayResource resource = new ByteArrayResource(compressedFile.getContent());
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + compressedFile.getFileName());
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + compressedFile.getFileName())
+                .headers(headers)
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(resource);
     }
